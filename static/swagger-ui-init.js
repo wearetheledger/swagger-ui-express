@@ -1,42 +1,27 @@
-
 window.onload = function() {
-  // Build a system
-  var url = window.location.search.match(/url=([^&]+)/);
-  if (url && url.length > 1) {
-    url = decodeURIComponent(url[1]);
-  } else {
-    url = window.location.origin;
-  }
-  var options = JSON.parse(document.getElementById('swagger-options').innerText)
-  url = options.swaggerUrl || url
-  var customOptions = options.customOptions
-  var spec1 = options.swaggerDoc
-  var swaggerOptions = {
-    spec: spec1,
-    url: url,
-    dom_id: '#swagger-ui',
-    deepLinking: true,
-    presets: [
-      SwaggerUIBundle.presets.apis,
-      SwaggerUIStandalonePreset
-    ],
-    plugins: [
-      SwaggerUIBundle.plugins.DownloadUrl
-    ],
-    layout: "StandaloneLayout"
-  }
-  for (var attrname in customOptions) {
-    swaggerOptions[attrname] = customOptions[attrname];
-  }
-  var ui = SwaggerUIBundle(swaggerOptions)
 
-  if (customOptions.oauth) {
-    ui.initOAuth(customOptions.oauth)
-  }
+    // Build a system
+    const ui = SwaggerUIBundle({
+        url: "http://" + location.host + "/api",
+        oauth2RedirectUrl: "http://" + location.host + "/api/oauth2-redirect.html",
+        dom_id: '#swagger-ui',
+        deepLinking: true,
+        presets: [
+            SwaggerUIBundle.presets.apis,
+            SwaggerUIStandalonePreset
+        ],
+        plugins: [
+            SwaggerUIBundle.plugins.DownloadUrl
+        ],
+        layout: "StandaloneLayout"
+    })
 
-  if (customOptions.authAction) {
-    ui.authActions.authorize(customOptions.authAction)
-  }
+    ui.initOAuth({
+        clientId: "YvtfMzxFzMqps3GjksQTLkg2W3SWpd43",
+        appName: "TLD-GREENCARDS",
+        scopeSeparator: " "
+    })
 
-  window.ui = ui
+    window.ui = ui
+
 }
